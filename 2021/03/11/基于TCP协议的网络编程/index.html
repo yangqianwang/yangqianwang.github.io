@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <script>if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMode)) window.location.href="https://support.dmeng.net/upgrade-your-browser.html?referrer="+encodeURIComponent(window.location.href); </script>
+    
+    
+        <link rel="shortcut icon" href="/images/favicon.png">
+    
+     
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.2.30/dist/vuetify.min.css" rel="stylesheet">
+    
+<link rel="stylesheet" href="/css/main.css">
+
+    
+    
+
+
+
+
+
+
+
+    
+    
+          
+
+    
+    
+    
+    
+    <title>
+        
+            基于TCP协议的网络编程 | qwyang
+        
+    </title>
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+    <div id="app">
+        <v-app>
+            <v-content id="page">
+                <v-container fluid>
+                    <v-row>
+                        <v-col cols="2" class="d-none d-md-block">
+                            <div id="sidebar" class="float-right">
+    <a href="/" rel="home">
+        <v-avatar size=96>
+            <img id="logo" src="/images/avatar.png">     
+        </v-avatar> 
+    </a>
+    <v-divider></v-divider>
+    <div class="mini-menu">
+        <v-btn icon href="/">
+            <v-icon>home</v-icon>
+        </v-btn>
+        <v-btn icon href="/categories/">
+            <v-icon>folder</v-icon>
+        </v-btn>
+        <v-btn icon href="/tags/">
+            <v-icon>bookmark</v-icon>
+        </v-btn>
+        <v-btn icon @click="SetNightMode">
+            <v-icon>{{ nightMode }}</v-icon>
+        </v-btn>
+    </div>
+    <v-list id="main-menu" class="font-weight-bold" flat>
+        
+            
+            <v-list-item href="/archives/" link>
+            <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                归档
+            </v-list-item-content>
+            </v-list-item>
+        
+            
+            <v-list-item href="/about/" link>
+            <v-list-item-icon><v-icon>account_circle</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                关于
+            </v-list-item-content>
+            </v-list-item>
+        
+            
+            <v-list-item href="https://qwyang.cn/" link>
+            <v-list-item-icon><v-icon>rss_feed</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                我的博客
+            </v-list-item-content>
+            </v-list-item>
+        
+    </v-list>
+    <v-divider></v-divider>
+    
+        <div class="post-toc">
+            <a href="/2021/03/11/%E5%9F%BA%E4%BA%8ETCP%E5%8D%8F%E8%AE%AE%E7%9A%84%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="toc-header">文章目录</a>
+            <div class="toc-content">
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%B1%82%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.</span> <span class="toc-text">应用层网络连接</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8ETcp%E5%8D%8F%E8%AE%AE"><span class="toc-number">2.</span> <span class="toc-text">基于Tcp协议</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ARQ%E5%8D%8F%E8%AE%AE"><span class="toc-number">2.1.</span> <span class="toc-text">ARQ协议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B"><span class="toc-number">2.2.</span> <span class="toc-text">三次握手</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B"><span class="toc-number">2.3.</span> <span class="toc-text">四次挥手</span></a></li></ol></li></ol>
+            </div>
+        </div>
+    
+
+    <div id="footer">
+        <div class="footer-social">
+            
+                
+                <v-btn icon href="mailto:qianwangyang@qq.com" target="_blank">
+                    <v-icon>fas fa-envelope</v-icon>
+                </v-btn>
+            
+                
+                <v-btn icon href="https://gitee.com/yangqianwang" target="_blank">
+                    <v-icon>fab fa-github</v-icon>
+                </v-btn>
+            
+        </div>
+        <v-divider></v-divider>
+        <div class="footer-content">
+<!--            -->
+<!--                <span id="busuanzi_container_site_uv" style="display: none;"> -->
+<!--                    总访客量 <span id="busuanzi_value_site_uv"></span>-->
+<!--                </span>-->
+<!--                <br>-->
+<!--            -->
+<!--            <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a></span><br>-->
+            <span>Powered by <a href="https://qwyang.cn/">qwyang</a></span><br>
+            <span>
+                &copy; 2018 - 2023
+                qwyang
+            </span><br>
+            <span>
+                <a href="https://beian.miit.gov.cn/" target="_blank" style="text-decoration: none; color: inherit;"><span>粤ICP备2022075232号</span></a>
+            </span>
+        </div>
+    </div>
+</div>
+
+                        </v-col>
+                        <v-col cols="12" md="10">
+                            <v-row>
+  <v-col cols="12" md="8" align-self="end">
+    <div id="site-header">
+      <div id="site-title">
+        <a href="/" rel="home">qwyang</a>
+      </div>
+      <div id="site-description"></div>
+      <div id="mobile-menu" class="d-block d-md-none">
+        <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-inner-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,false)"></v-text-field>
+        <div class="mobile-mini-menu">
+          <v-btn icon href="/">
+              <v-icon>home</v-icon>
+          </v-btn>
+          <v-btn icon href="/categories/">
+              <v-icon>folder</v-icon>
+          </v-btn>
+          <v-btn icon href="/tags/">
+              <v-icon>bookmark</v-icon>
+          </v-btn>
+          <v-btn icon @click="SetNightMode">
+              <v-icon>{{ nightMode }}</v-icon>
+          </v-btn>
+          
+            
+            <v-btn icon href="/archives/">
+              <v-icon>archive</v-icon>
+            </v-btn>
+          
+            
+            <v-btn icon href="/about/">
+              <v-icon>account_circle</v-icon>
+            </v-btn>
+          
+            
+            <v-btn icon href="https://qwyang.cn/">
+              <v-icon>rss_feed</v-icon>
+            </v-btn>
+          
+        </div>
+      </div>    
+    </div>
+  </v-col>  
+  <v-col cols="4" align-self="end" class="d-none d-md-block">
+    <v-col align-self="end">
+      <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,false)"></v-text-field>
+    </v-col> 
+  </v-col>
+</v-row>
+
+                            <v-card class="elevation-2 post-card">
+    
+    
+        <div class="post-header">
+  <a class="post-header-title font-weight-medium" href="/2021/03/11/%E5%9F%BA%E4%BA%8ETCP%E5%8D%8F%E8%AE%AE%E7%9A%84%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">基于TCP协议的网络编程</a>
+  <div class="post-header-meta">   
+    <span>
+      <v-icon color="">event</v-icon>
+      发布于:&nbsp;2021-03-11
+    </span>
+    <span>
+      <v-icon color="">event_available</v-icon>
+      更新于:&nbsp;2023-07-22
+    </span>
+    <span>
+      <v-icon color="">folder</v-icon>
+      分类于:&nbsp;未分类
+    </span>
+    
+    <span>
+      <v-icon color="">visibility</v-icon>
+      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+    </span>
+    
+  </div>
+</div>
+
+    
+    
+    
+    
+    <div class="post-content typo">
+        <h1 id="应用层网络连接"><a href="#应用层网络连接" class="headerlink" title="应用层网络连接"></a>应用层网络连接</h1><p>URL和URLConnections提供较高的级别来访问Internet上的资源，既基于 应用层的网络连接。  </p>
+<!-- &emsp;&emsp;是的 -->
+
+<h1 id="基于Tcp协议"><a href="#基于Tcp协议" class="headerlink" title="基于Tcp协议"></a>基于Tcp协议</h1><p>&emsp;&emsp;TCP和UDP协议是基于传输层的网络连接机制。TCP提供互联网上客户端-服务应用相互通信的可靠的点对点通信通道。TCP面向连接服务，在传输数据前必须建立连接，数据传输结束后，释放连接，所以TCP不提供广播或多播。</p>
+<p>&emsp;&emsp;要通过TCP进行通信，客户端程序和服务器建立彼此的连接。两个计算机进程要相互通信，不仅要知道对方的IP地址（为找到对方的计算机），而且要知道对方的端口号（为找到对方计算机中的应用进程）根据RFC793的定义：端口号拼接IP地址即构成了套接字socket。  </p>
+<p>&emsp;&emsp;java.net包提供了Socket和ServerSocket类。客户端连接服务器端要使用的套接字类：Socket；服务器接收连接要使用的套接字类：ServerSocket。</p>
+<p>&emsp;&emsp;客户端和服务端连接通信过程：</p>
+<p>&emsp;&emsp;&emsp;&emsp;服务端：创建绑定到特定端口号的套接字，接着等待来自客户端套接字的连接请求。<br>&emsp;&emsp;&emsp;&emsp;客户端：根据服务器端运行的IP地址和端口号创建套接字进行请求连接，发送到服务端的连接请求还包括系统自动分配给客户端所站用的本地端口号  </p>
+<p>套接字 socket &#x3D; (IP地址:端口号)<br>每一条TCP连接唯一被通信的两个端点所确定。即：<br>TCP ::&#x3D; {socket1:socket2} &#x3D; {(IP1:port1),(IP2,port2)}</p>
+<h2 id="ARQ协议"><a href="#ARQ协议" class="headerlink" title="ARQ协议"></a>ARQ协议</h2><p>发送方维持发送窗口，发送方收到确认信息后，就把发送窗口前移一个分组的位置。接收方采用累积确认的方式，对按序到达的最后一个分组发送确认。</p>
+<h2 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h2><p>client主动打开连接，server被动打开连接。<br>①client向server发起请求连接<br>②server接收到client的请求，如果同意请求，向client发送确认<br>③client收到server的确认信息后，再向server发送确认信息。</p>
+<img src="/images/img/threeHandShake.jpg" class="" width="500" height="500" title="rotate(270deg)">
+
+<h2 id="四次挥手"><a href="#四次挥手" class="headerlink" title="四次挥手"></a>四次挥手</h2><p>在数据传输接收后，通信双方都可释放连接。下面假设client先向其TCP发出连接释放报文。<br>①client发出释放TCP连接请求，client并进入FIN-WAIT-1状态（终止等待1）<br>②server接收到释放请求后即发出确认。并进入CLOSE-WAIT状态。TCP已经进入半关闭状态。client对server方向的已经关闭，但server对client方向的并未关闭。此时client已经没有数据要发了，但server若发数据，client还是可以进行接收。<br>③server发送完数据后，server上的应用进程通知TCP释放连接。<br>④client收server连接释放报文后，向server发出确认报文。  </p>
+<img src="/images/img/%E5%9B%9B%E6%AC%A1%E6%8F%A1%E6%89%8B.jpg" class="" width="500" height="500" title="rotate(270deg)">
+
+<p>疑问：<br>client 在TIME-WAIT状态为什么要等2MSL的时间？<br>①保证最后一个ACK报文能到达server。最后一个ACK报文有可能丢失，因此server超时重传FIN + ACK报文。而client在2MSL时间内收到传出的FIN + ACK报文段，接着client重传一次确认，重新启动2MSL计时器。最后client和server都正常进入closed状态。<br>如果client没有等待一段时间就直接进入closed状态，client确认报文丢失，则server将按正常步骤进入closed状态。<br>② 防止已失效的连接请求报文出现在本连接中。等待2MSL后可以使本连续时间内所以产生的所以报文都从网络中消失。如果client确认后马上进入closed状态，已失效的请求连接可能再次进行请求。</p>
+<p>示例代码：  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.PrintWriter;</span><br><span class="line"><span class="keyword">import</span> java.net.Socket;</span><br><span class="line"><span class="comment">//客户端发起请求</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EchoClient</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] arr)</span>&#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">hostName</span> <span class="operator">=</span> <span class="string">&quot;127.0.0.1&quot;</span>;  <span class="comment">//ip地址</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">portNumber</span> <span class="operator">=</span> <span class="number">35600</span>; <span class="comment">//端口号</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//创建流套接字并将其连接到指定主机上的指定端口号</span></span><br><span class="line">            <span class="type">Socket</span> <span class="variable">echoSocket</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Socket</span>(hostName,portNumber);</span><br><span class="line">            <span class="type">PrintWriter</span> <span class="variable">out</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PrintWriter</span>(echoSocket.getOutputStream(),<span class="literal">true</span>);</span><br><span class="line">            <span class="type">BufferedReader</span> <span class="variable">in</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(<span class="keyword">new</span> <span class="title class_">InputStreamReader</span>(echoSocket.getInputStream()));</span><br><span class="line">            <span class="type">BufferedReader</span> <span class="variable">stdIn</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(<span class="keyword">new</span> <span class="title class_">InputStreamReader</span>(System.in));</span><br><span class="line">            String userInpput;</span><br><span class="line">            <span class="keyword">while</span>((userInpput = stdIn.readLine()) != <span class="literal">null</span>)&#123;</span><br><span class="line">                out.println(userInpput);</span><br><span class="line">                System.out.println(<span class="string">&quot;echo : &quot;</span>+in.readLine());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> singleTCPConnection;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.BufferedReader;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStreamReader;</span><br><span class="line"><span class="keyword">import</span> java.io.PrintWriter;</span><br><span class="line"><span class="keyword">import</span> java.net.ServerSocket;</span><br><span class="line"><span class="keyword">import</span> java.net.Socket;</span><br><span class="line"><span class="comment">//服务端要先运行监听客户端的请求</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EchoServer</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] arr)</span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//创建服务端套接字，打开端口，并监听来自客户端的连接请求</span></span><br><span class="line">            <span class="type">ServerSocket</span> <span class="variable">serverSocket</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ServerSocket</span>(<span class="number">35600</span>);</span><br><span class="line">            <span class="comment">//监听要建立到此套接字的连接并接受它。该方法会阻塞，直到建立连接。</span></span><br><span class="line">            <span class="type">Socket</span> <span class="variable">clientSocket</span> <span class="operator">=</span> serverSocket.accept();</span><br><span class="line">            <span class="comment">//打开输出流，并自动清空流</span></span><br><span class="line">            <span class="type">PrintWriter</span> <span class="variable">out</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PrintWriter</span>(clientSocket.getOutputStream(),<span class="literal">true</span>);</span><br><span class="line">            <span class="comment">//打开输入流</span></span><br><span class="line">            <span class="type">BufferedReader</span> <span class="variable">in</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(<span class="keyword">new</span> <span class="title class_">InputStreamReader</span>(clientSocket.getInputStream()));</span><br><span class="line">            String inputLine;</span><br><span class="line">            <span class="comment">//in.readLine()  读取一行文本。一行被认为是由换行(&#x27;\n&#x27;)、回车(&#x27;\r&#x27;)或回车后紧跟着换行中的任何一个结束的</span></span><br><span class="line">            <span class="keyword">while</span>((inputLine = in.readLine()) != <span class="literal">null</span>)&#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;come from client : &quot;</span>+inputLine);</span><br><span class="line">                <span class="comment">//写入流并发送回客户端</span></span><br><span class="line">                out.println(inputLine);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+    </div>
+    <!--文末结束语-->
+    
+        <div style="text-align:center;color: #ccc;font-size:24px;"> --- 本文结束 <i class="fas fa-heart"></i> The End --- </div>
+    
+    <!--页脚广告-->
+    
+    <v-divider></v-divider>
+    
+    <div class="post-nav">             
+        
+            <div class="post-nav-button float-left">
+                <v-icon>chevron_left</v-icon>
+                <a class="font-weight-bold text-left" href="/2021/03/12/UUID%E7%89%88%E6%9C%AC/">
+                    UUID版本
+                </a>
+            </div>
+              
+        
+    </div>
+</v-card>
+
+
+
+        
+                            <div id="mobile-footer" class="d-block d-md-none">
+                                <v-divider></v-divider>
+                                <div id="mobile-footer-content">
+                                    <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a> &nbsp; Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a></span><br>
+                                    <span> &copy; 2015 - 2023 qwyang</span>
+                                </div>
+                            </div>                   
+                        </v-col>                                            
+                    </v-row>
+                </v-container>
+            </v-content>
+        </v-app>
+    </div>
+    
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.2.30"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-base64@3.5.2/base64.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+
+
+
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@8.4.8/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({
+        startOnLoad: true,
+        theme: "default"
+    });</script>
+
+
+
+
+
+</body>
+</html>

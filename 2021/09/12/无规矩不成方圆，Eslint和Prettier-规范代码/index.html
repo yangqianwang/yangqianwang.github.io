@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <script>if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMode)) window.location.href="https://support.dmeng.net/upgrade-your-browser.html?referrer="+encodeURIComponent(window.location.href); </script>
+    
+    
+        <link rel="shortcut icon" href="/images/favicon.png">
+    
+     
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.2.30/dist/vuetify.min.css" rel="stylesheet">
+    
+<link rel="stylesheet" href="/css/main.css">
+
+    
+    
+
+
+
+
+
+
+
+    
+    
+          
+
+    
+    
+    
+    
+    <title>
+        
+            无规矩不成方圆，Eslint和Prettier 规范代码 | qwyang
+        
+    </title>
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+    <div id="app">
+        <v-app>
+            <v-content id="page">
+                <v-container fluid>
+                    <v-row>
+                        <v-col cols="2" class="d-none d-md-block">
+                            <div id="sidebar" class="float-right">
+    <a href="/" rel="home">
+        <v-avatar size=96>
+            <img id="logo" src="/images/avatar.png">     
+        </v-avatar> 
+    </a>
+    <v-divider></v-divider>
+    <div class="mini-menu">
+        <v-btn icon href="/">
+            <v-icon>home</v-icon>
+        </v-btn>
+        <v-btn icon href="/categories/">
+            <v-icon>folder</v-icon>
+        </v-btn>
+        <v-btn icon href="/tags/">
+            <v-icon>bookmark</v-icon>
+        </v-btn>
+        <v-btn icon @click="SetNightMode">
+            <v-icon>{{ nightMode }}</v-icon>
+        </v-btn>
+    </div>
+    <v-list id="main-menu" class="font-weight-bold" flat>
+        
+            
+            <v-list-item href="/archives/" link>
+            <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                归档
+            </v-list-item-content>
+            </v-list-item>
+        
+            
+            <v-list-item href="/about/" link>
+            <v-list-item-icon><v-icon>account_circle</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                关于
+            </v-list-item-content>
+            </v-list-item>
+        
+            
+            <v-list-item href="https://qwyang.cn/" link>
+            <v-list-item-icon><v-icon>rss_feed</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                我的博客
+            </v-list-item-content>
+            </v-list-item>
+        
+    </v-list>
+    <v-divider></v-divider>
+    
+        <div class="post-toc">
+            <a href="/2021/09/12/%E6%97%A0%E8%A7%84%E7%9F%A9%E4%B8%8D%E6%88%90%E6%96%B9%E5%9C%86%EF%BC%8CEslint%E5%92%8CPrettier-%E8%A7%84%E8%8C%83%E4%BB%A3%E7%A0%81/" class="toc-header">文章目录</a>
+            <div class="toc-content">
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ESLint"><span class="toc-number">1.</span> <span class="toc-text">ESLint</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ESLint-%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.</span> <span class="toc-text">ESLint 配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Prettier-%E6%8F%92%E4%BB%B6"><span class="toc-number">2.</span> <span class="toc-text">Prettier 插件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ESLint-%E5%92%8C-Prettier-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">2.1.</span> <span class="toc-text">ESLint 和 Prettier 的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Prettier-%E4%BD%BF%E7%94%A8%E5%AE%89%E8%A3%85"><span class="toc-number">2.2.</span> <span class="toc-text">Prettier 使用安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#prettier-%E4%B8%8E-ESlint-%E9%85%8D%E5%90%88%E4%BD%BF%E7%94%A8"><span class="toc-number">2.3.</span> <span class="toc-text">prettier 与 ESlint 配合使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9Prettier%E8%BF%9B%E8%A1%8C%E9%85%8D%E7%BD%AE"><span class="toc-number">2.4.</span> <span class="toc-text">对Prettier进行配置</span></a></li></ol></li></ol>
+            </div>
+        </div>
+    
+
+    <div id="footer">
+        <div class="footer-social">
+            
+                
+                <v-btn icon href="mailto:qianwangyang@qq.com" target="_blank">
+                    <v-icon>fas fa-envelope</v-icon>
+                </v-btn>
+            
+                
+                <v-btn icon href="https://gitee.com/yangqianwang" target="_blank">
+                    <v-icon>fab fa-github</v-icon>
+                </v-btn>
+            
+        </div>
+        <v-divider></v-divider>
+        <div class="footer-content">
+<!--            -->
+<!--                <span id="busuanzi_container_site_uv" style="display: none;"> -->
+<!--                    总访客量 <span id="busuanzi_value_site_uv"></span>-->
+<!--                </span>-->
+<!--                <br>-->
+<!--            -->
+<!--            <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a></span><br>-->
+            <span>Powered by <a href="https://qwyang.cn/">qwyang</a></span><br>
+            <span>
+                &copy; 2018 - 2023
+                qwyang
+            </span><br>
+            <span>
+                <a href="https://beian.miit.gov.cn/" target="_blank" style="text-decoration: none; color: inherit;"><span>粤ICP备2022075232号</span></a>
+            </span>
+        </div>
+    </div>
+</div>
+
+                        </v-col>
+                        <v-col cols="12" md="10">
+                            <v-row>
+  <v-col cols="12" md="8" align-self="end">
+    <div id="site-header">
+      <div id="site-title">
+        <a href="/" rel="home">qwyang</a>
+      </div>
+      <div id="site-description"></div>
+      <div id="mobile-menu" class="d-block d-md-none">
+        <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-inner-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,false)"></v-text-field>
+        <div class="mobile-mini-menu">
+          <v-btn icon href="/">
+              <v-icon>home</v-icon>
+          </v-btn>
+          <v-btn icon href="/categories/">
+              <v-icon>folder</v-icon>
+          </v-btn>
+          <v-btn icon href="/tags/">
+              <v-icon>bookmark</v-icon>
+          </v-btn>
+          <v-btn icon @click="SetNightMode">
+              <v-icon>{{ nightMode }}</v-icon>
+          </v-btn>
+          
+            
+            <v-btn icon href="/archives/">
+              <v-icon>archive</v-icon>
+            </v-btn>
+          
+            
+            <v-btn icon href="/about/">
+              <v-icon>account_circle</v-icon>
+            </v-btn>
+          
+            
+            <v-btn icon href="https://qwyang.cn/">
+              <v-icon>rss_feed</v-icon>
+            </v-btn>
+          
+        </div>
+      </div>    
+    </div>
+  </v-col>  
+  <v-col cols="4" align-self="end" class="d-none d-md-block">
+    <v-col align-self="end">
+      <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,false)"></v-text-field>
+    </v-col> 
+  </v-col>
+</v-row>
+
+                            <v-card class="elevation-2 post-card">
+    
+    
+        <div class="post-header">
+  <a class="post-header-title font-weight-medium" href="/2021/09/12/%E6%97%A0%E8%A7%84%E7%9F%A9%E4%B8%8D%E6%88%90%E6%96%B9%E5%9C%86%EF%BC%8CEslint%E5%92%8CPrettier-%E8%A7%84%E8%8C%83%E4%BB%A3%E7%A0%81/">无规矩不成方圆，Eslint和Prettier 规范代码</a>
+  <div class="post-header-meta">   
+    <span>
+      <v-icon color="">event</v-icon>
+      发布于:&nbsp;2021-09-12
+    </span>
+    <span>
+      <v-icon color="">event_available</v-icon>
+      更新于:&nbsp;2023-07-22
+    </span>
+    <span>
+      <v-icon color="">folder</v-icon>
+      分类于:&nbsp;未分类
+    </span>
+    
+    <span>
+      <v-icon color="">visibility</v-icon>
+      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+    </span>
+    
+  </div>
+</div>
+
+    
+    
+    
+    
+    <div class="post-content typo">
+        <blockquote>
+<p>代码规范是软件开发领域经久不衰的换题，几乎所有工程师在开发过程中都会遇到，并或多或少会思考过这一问题。随着前端应用的大型化和复杂化，越来越多的前端团队开始重视 JavaScript 代码规范。  </p>
+</blockquote>
+<h2 id="ESLint"><a href="#ESLint" class="headerlink" title="ESLint"></a>ESLint</h2><p>ESLint 官方简介：</p>
+<blockquote>
+<p>代码检查是一种静态的分析，常用于寻找有问题的模式或者代码，并且不依赖于具体的编码风格。对大多数编程语言来说都会有代码检查，一般来说编译程序会内置检查工具。</p>
+</blockquote>
+<blockquote>
+<p>JavaScript 是一个动态的弱类型语言，在开发中比较容易出错。因为没有编译程序，为了寻找 JavaScript 代码错误通常需要在执行过程中不断调试。像 ESLint 这样的可以让程序员在编码的过程中发现问题而不是在执行的过程中。</p>
+</blockquote>
+<p> &nbsp; &nbsp; &nbsp; &nbsp;ESLint 是一款插件化的 JavaScript 代码静态检查工具，核心是通过对代码解析得到 AST（Sbstract Syntax Tree 抽象语法树） 进行模式匹配，来分析代码达到检查代码质量和风格的能力</p>
+<h3 id="ESLint-配置"><a href="#ESLint-配置" class="headerlink" title="ESLint 配置"></a>ESLint 配置</h3><p> 1、初始化<br> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install eslint --save-dev</span><br><span class="line">eslint --init</span><br></pre></td></tr></table></figure><br> 在使用 eslint –init 后，会出现许多配置项，可以按照需要回答。<br> <img src="/images/img/eslint%E5%88%9D%E5%A7%8B%E5%8C%96.png" class="">  </p>
+<p>经过问答后生成一个 .eslintrc.js 文件。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line"> <span class="attr">env</span>: &#123;</span><br><span class="line">  <span class="comment">// 环境</span></span><br><span class="line">  <span class="attr">browser</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">es2021</span>: <span class="literal">true</span>,</span><br><span class="line"> &#125;,</span><br><span class="line"> <span class="attr">extends</span>: [</span><br><span class="line">  <span class="comment">// 拓展</span></span><br><span class="line">  <span class="string">&#x27;eslint:recommended&#x27;</span>,</span><br><span class="line">  <span class="string">&#x27;plugin:@typescript-eslint/recommended&#x27;</span>,</span><br><span class="line"> ],</span><br><span class="line"> <span class="attr">parser</span>: <span class="string">&#x27;@typescript-eslint/parser&#x27;</span>, <span class="comment">// 解析器，本解析器支持Ts</span></span><br><span class="line"> <span class="attr">parserOptions</span>: &#123;</span><br><span class="line">  <span class="comment">// 解析器配置选项</span></span><br><span class="line">  <span class="attr">ecmaVersion</span>: <span class="number">12</span>, <span class="comment">// 指定es版本</span></span><br><span class="line">  <span class="attr">sourceType</span>: <span class="string">&#x27;module&#x27;</span>, <span class="comment">// 代码支持es6，使用module</span></span><br><span class="line"> &#125;,</span><br><span class="line"> <span class="attr">plugins</span>: [</span><br><span class="line">  <span class="comment">// 插件</span></span><br><span class="line">  <span class="string">&#x27;@typescript-eslint&#x27;</span>,</span><br><span class="line"> ],</span><br><span class="line"> <span class="attr">rules</span>: &#123;</span><br><span class="line">  <span class="comment">// 规则</span></span><br><span class="line"> &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="Prettier-插件"><a href="#Prettier-插件" class="headerlink" title="Prettier 插件"></a>Prettier 插件</h2><p>&nbsp;&nbsp; &nbsp; &nbsp;它通过解析代码并使用自己的规则重新打印它，并考虑最大行长来强制执行一致的样式，并在必要时包装代码。如今，它已成为解决所有代码格式问题的优选方案；支持 JavaScript、 Flow、 TypeScript、 CSS、 SCSS、 Less、 JSX、 Vue、 GraphQL、 JSON、 Markdown 等语言，您可以结合 ESLint 和 Prettier，检测代码中潜在问题的同时，还能统一团队代码风格，从而促使写出高质量代码，来提升工作效率。</p>
+<h3 id="ESLint-和-Prettier-的区别"><a href="#ESLint-和-Prettier-的区别" class="headerlink" title="ESLint 和 Prettier 的区别"></a>ESLint 和 Prettier 的区别</h3><p>&nbsp;&nbsp; &nbsp; &nbsp;在格式化代码方面， Prettier 确实和 ESLint 有重叠，但两者侧重点不同：ESLint 主要工作就是检查代码质量并给出提示，它所能提供的格式化功能很有限；而 Prettier 在格式化代码方面具有更大优势。所幸，Prettier 被设计为易于与 ESLint 集成，所以你可以轻松在项目中使两者，而无需担心冲突。</p>
+<h3 id="Prettier-使用安装"><a href="#Prettier-使用安装" class="headerlink" title="Prettier 使用安装"></a>Prettier 使用安装</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install prettier --save-dev</span><br></pre></td></tr></table></figure>
+<p>在文件夹钟创建配置文件和ignore.文件。</p>
+<blockquote>
+<p>根目录创建 .prettierrc 文件，能够写入YML、JSON 的配置格式，并支持 .yaml、.yml、.js 后缀<br>根目录创建.prettier.config.js 文件，并对外export一个对象<br>在package.json中新建Prettier属性  </p>
+</blockquote>
+<p>格式化代码：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx prettier --write . #格式所有文件</span><br></pre></td></tr></table></figure>
+<h3 id="prettier-与-ESlint-配合使用"><a href="#prettier-与-ESlint-配合使用" class="headerlink" title="prettier 与 ESlint 配合使用"></a>prettier 与 ESlint 配合使用</h3><p>&nbsp;&nbsp; &nbsp; &nbsp;ESLint 和 Prettier 相互合作的时候有一些问题，对于他们交集的部分规则，ESLint 和 Prettier 格式化后的代码格式不一致。导致的问题是：当你用 Prettier 格式化代码后再用 ESLint 去检测，会出现一些因为格式化导致的 warning，当你用eslint –fix修复问题，又无法通过Prettier校验，导致陷入一开始提到的“死循环问题”。<br>&nbsp;&nbsp; &nbsp; &nbsp;这种问题的主要解决思路是在 ESLint 的规则配置文件上做文章，安装特定的 plugin，把其配置到规则的尾部，实现 Prettier 规则对 ESLint 规则的覆盖。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev eslint-config-prettier</span><br></pre></td></tr></table></figure>
+<p>在 .eslintrc 文件里面配置 extends 字段</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;extends&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">      <span class="comment">//.....已配置的规则</span></span><br><span class="line">   <span class="string">&quot;prettier&quot;</span><span class="punctuation">,</span></span><br><span class="line">   <span class="string">&quot;prettier/@typescript-eslint&quot;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>extends的值为数组，会继承和覆盖前面的配置，将Prettier配置添加到其它拓展的后面，可以实现 Prettier 规则对 ESLint 规则的覆盖。<br>完成上述两步可以实现的是运行 ESLint 命令会按照 Prettier 的规则做相关校验，但是还是需要运行 Prettier 命令来进行格式化。为了避免多此一举，万能的社区早就提出了整合上面两步的方案：在使用 eslint –fix 时候，实际使用 Prettier 来替代 ESLint 的格式化功能。  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev eslint-plugin-prettier</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;extends&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="comment">//...&quot;已经配置的规则&quot;,</span></span><br><span class="line">    <span class="string">&quot;plugin:prettier/recommended&quot;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;rules&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;prettier/prettier&quot;</span><span class="punctuation">:</span> <span class="string">&quot;error&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="对Prettier进行配置"><a href="#对Prettier进行配置" class="headerlink" title="对Prettier进行配置"></a>对Prettier进行配置</h3><p>我们可以使用prettierrc.js的方式对Prettier进行配置，下面讲解下各个配置的作用。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line"> <span class="attr">printWidth</span>: <span class="number">80</span>, <span class="comment">//一行的字符数，如果超过会进行换行，默认为80</span></span><br><span class="line"> <span class="attr">tabWidth</span>: <span class="number">2</span>, <span class="comment">//一个tab代表几个空格数，默认为80</span></span><br><span class="line"> <span class="attr">useTabs</span>: <span class="literal">false</span>, <span class="comment">//是否使用tab进行缩进，默认为false，表示用空格进行缩减</span></span><br><span class="line"> <span class="attr">singleQuote</span>: <span class="literal">false</span>, <span class="comment">//字符串是否使用单引号，默认为false，使用双引号</span></span><br><span class="line"> <span class="attr">semi</span>: <span class="literal">true</span>, <span class="comment">//行位是否使用分号，默认为true</span></span><br><span class="line"> <span class="attr">trailingComma</span>: <span class="string">&#x27;none&#x27;</span>, <span class="comment">//是否使用尾逗号，有三个可选值&quot;&lt;none|es5|all&gt;&quot;</span></span><br><span class="line"> <span class="attr">bracketSpacing</span>: <span class="literal">true</span>, <span class="comment">//对象大括号直接是否有空格，默认为true，效果：&#123; foo: bar &#125;</span></span><br><span class="line"> <span class="attr">parser</span>: <span class="string">&#x27;babylon&#x27;</span>, <span class="comment">//代码的解析引擎，默认为babylon，与babel相同。</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+    <!--文末结束语-->
+    
+        <div style="text-align:center;color: #ccc;font-size:24px;"> --- 本文结束 <i class="fas fa-heart"></i> The End --- </div>
+    
+    <!--页脚广告-->
+    
+    <v-divider></v-divider>
+    
+    <div class="post-nav">             
+        
+            <div class="post-nav-button float-left">
+                <v-icon>chevron_left</v-icon>
+                <a class="font-weight-bold text-left" href="/2021/09/12/Java%E4%B8%AD%E7%9A%84%E5%AF%B9%E8%B1%A1%E4%B8%80%E5%AE%9A%E5%9C%A8%E5%A0%86%E4%B8%8A%E5%88%86%E9%85%8D%E5%90%97%EF%BC%9F/">
+                    Java中的对象一定在堆上分配吗？
+                </a>
+            </div>
+              
+          
+            <div class="post-nav-button float-right">
+                <a class="font-weight-bold text-right" href="/2021/09/09/react-%E8%B7%A8%E5%9F%9F/">      
+                    react 跨域
+                </a>
+                <v-icon>chevron_right</v-icon>
+            </div>
+        
+    </div>
+</v-card>
+
+
+
+        
+                            <div id="mobile-footer" class="d-block d-md-none">
+                                <v-divider></v-divider>
+                                <div id="mobile-footer-content">
+                                    <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a> &nbsp; Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a></span><br>
+                                    <span> &copy; 2015 - 2023 qwyang</span>
+                                </div>
+                            </div>                   
+                        </v-col>                                            
+                    </v-row>
+                </v-container>
+            </v-content>
+        </v-app>
+    </div>
+    
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.2.30"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-base64@3.5.2/base64.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+
+
+
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@8.4.8/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({
+        startOnLoad: true,
+        theme: "default"
+    });</script>
+
+
+
+
+
+</body>
+</html>

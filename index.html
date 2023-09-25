@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <script>if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMode)) window.location.href="https://support.dmeng.net/upgrade-your-browser.html?referrer="+encodeURIComponent(window.location.href); </script>
+    
+    
+        <link rel="shortcut icon" href="/images/favicon.png">
+    
+     
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.2.30/dist/vuetify.min.css" rel="stylesheet">
+    
+<link rel="stylesheet" href="/css/main.css">
+
+    
+    
+
+
+
+
+
+
+
+    
+    
+    
+        <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        
+            load: ['[tex]/mhchem'],
+        
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        
+            packages: {'[+]': ['mhchem']},
+        
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+          
+
+    
+    
+    
+    
+    <title>
+          
+            qwyang
+        
+    </title>
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+    <div id="app">
+        <v-app>
+            <v-content id="page">
+                <v-container fluid>
+                    <v-row>
+                        <v-col cols="2" class="d-none d-md-block">
+                            <div id="sidebar" class="float-right">
+    <a href="/" rel="home">
+        <v-avatar size=96>
+            <img id="logo" src="/images/avatar.png">     
+        </v-avatar> 
+    </a>
+    <v-divider></v-divider>
+    <div class="mini-menu">
+        <v-btn icon href="/">
+            <v-icon>home</v-icon>
+        </v-btn>
+        <v-btn icon href="/categories/">
+            <v-icon>folder</v-icon>
+        </v-btn>
+        <v-btn icon href="/tags/">
+            <v-icon>bookmark</v-icon>
+        </v-btn>
+        <v-btn icon @click="SetNightMode">
+            <v-icon>{{ nightMode }}</v-icon>
+        </v-btn>
+    </div>
+    <v-list id="main-menu" class="font-weight-bold" flat>
+        
+            
+            <v-list-item href="/archives/" link>
+            <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                归档
+            </v-list-item-content>
+            </v-list-item>
+        
+            
+            <v-list-item href="/about/" link>
+            <v-list-item-icon><v-icon>account_circle</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                关于
+            </v-list-item-content>
+            </v-list-item>
+        
+            
+            <v-list-item href="https://qwyang.cn/" link>
+            <v-list-item-icon><v-icon>rss_feed</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                我的博客
+            </v-list-item-content>
+            </v-list-item>
+        
+    </v-list>
+    <v-divider></v-divider>
+    
+        <v-list id="sub-menu" class="font-weight-medium" dense>
+            
+        </v-list>    
+    
+
+    <div id="footer">
+        <div class="footer-social">
+            
+                
+                <v-btn icon href="mailto:qianwangyang@qq.com" target="_blank">
+                    <v-icon>fas fa-envelope</v-icon>
+                </v-btn>
+            
+                
+                <v-btn icon href="https://gitee.com/yangqianwang" target="_blank">
+                    <v-icon>fab fa-github</v-icon>
+                </v-btn>
+            
+        </div>
+        <v-divider></v-divider>
+        <div class="footer-content">
+<!--            -->
+<!--                <span id="busuanzi_container_site_uv" style="display: none;"> -->
+<!--                    总访客量 <span id="busuanzi_value_site_uv"></span>-->
+<!--                </span>-->
+<!--                <br>-->
+<!--            -->
+<!--            <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a></span><br>-->
+            <span>Powered by <a href="https://qwyang.cn/">qwyang</a></span><br>
+            <span>
+                &copy; 2018 - 2023
+                qwyang
+            </span><br>
+            <span>
+                <a href="https://beian.miit.gov.cn/" target="_blank" style="text-decoration: none; color: inherit;"><span>粤ICP备2022075232号</span></a>
+            </span>
+        </div>
+    </div>
+</div>
+
+                        </v-col>
+                        <v-col cols="12" md="10">
+                            <v-row>
+  <v-col cols="12" md="8" align-self="end">
+    <div id="site-header">
+      <div id="site-title">
+        <a href="/" rel="home">qwyang</a>
+      </div>
+      <div id="site-description"></div>
+      <div id="mobile-menu" class="d-block d-md-none">
+        <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-inner-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,false)"></v-text-field>
+        <div class="mobile-mini-menu">
+          <v-btn icon href="/">
+              <v-icon>home</v-icon>
+          </v-btn>
+          <v-btn icon href="/categories/">
+              <v-icon>folder</v-icon>
+          </v-btn>
+          <v-btn icon href="/tags/">
+              <v-icon>bookmark</v-icon>
+          </v-btn>
+          <v-btn icon @click="SetNightMode">
+              <v-icon>{{ nightMode }}</v-icon>
+          </v-btn>
+          
+            
+            <v-btn icon href="/archives/">
+              <v-icon>archive</v-icon>
+            </v-btn>
+          
+            
+            <v-btn icon href="/about/">
+              <v-icon>account_circle</v-icon>
+            </v-btn>
+          
+            
+            <v-btn icon href="https://qwyang.cn/">
+              <v-icon>rss_feed</v-icon>
+            </v-btn>
+          
+        </div>
+      </div>    
+    </div>
+  </v-col>  
+  <v-col cols="4" align-self="end" class="d-none d-md-block">
+    <v-col align-self="end">
+      <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,false)"></v-text-field>
+    </v-col> 
+  </v-col>
+</v-row>
+
+                            <v-card class="elevation-2 index-card">
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2022-11-08
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/2022/11/08/%E4%BD%BF%E7%94%A8-jMockit-%E5%81%9A%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">未分类></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2022/11/08/%E4%BD%BF%E7%94%A8-jMockit-%E5%81%9A%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">使用 jMockit 做单元测试</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          JMockit&#8195;&#8195;Mock测试，是在测试过程中对某些不容易构造或在不容易获取的对象，用虚拟的对象来创建以便测试。&#8195;&#8195;JMockit是基于JavaSE5中的java.lang.instrument包开发，内部使用ASM库来动态修改java的字节码，使得java这种静态语言可以想动态脚本语言一样动态设置被Mock对象私有属性，模拟静态、私有方法行为等等，对于手机开发，嵌入式开发等要求代码尽量简洁的情况下，或者对于被测试代码不想做任何修改的前提下，使用JMockit可以轻松搞定很多测试场景。&#8195;&#8195;在日常开发时是否会经常出现这...
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2022/11/08/%E4%BD%BF%E7%94%A8-jMockit-%E5%81%9A%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2022-11-08
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/2022/11/08/%E4%BD%BF%E7%94%A8GoMock-%E5%81%9A%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">未分类></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2022/11/08/%E4%BD%BF%E7%94%A8GoMock-%E5%81%9A%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">使用GoMock 做单元测试</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          gomock&#8195;&#8195;gomock 是 Go 编程语言的模拟框架。实现较为完整的基于interface的Mock功能，与 Go 内置的测试包良好集成，也能用于其它测试环境中。GoMock 测试框架包含了 GoMock 包和mockgen工具两部分，其中 GoMock 包完成测试对象生命周期管理，mockgen 工具用来生成 interface 对应的模拟类源文件。
+安装12go get github.com/golang/mock/mockgen@v1.6.0go install github.com/golang/mock/mockgen@v1.6.0
+
+用法&#81...
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2022/11/08/%E4%BD%BF%E7%94%A8GoMock-%E5%81%9A%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2022-09-30
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/2022/09/30/spring%E4%BD%BF%E7%94%A8junit%E5%81%9A%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">未分类></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2022/09/30/spring%E4%BD%BF%E7%94%A8junit%E5%81%9A%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">spring使用junit做单元测试</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          什么是单元测试？&emsp;&emsp;单元测试用例是代码的一部分从而确保代码（方法）的另一部分工作正常。要快速实现这些理想的效果，测试框架是必需的。JUnit对于Java编程语言是完美的单元测试框架。  
+&emsp;&emsp;正式书面单元测试用例的特征是众所周知输入和期望的输出，这是在执行测试之前制定的。已知的输入应该作为测试的前提条件以及预期输出应该为测试后置条件。  
+&emsp;&emsp;必须有至少两个单元测试用例针对每个要求： 一个正测试和负测试。如果要求有不合要求，每个子需求必须至少有两个测试用例作为正负。  
+加入依赖包在使用maven，基于spring的项目在pom...
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2022/09/30/spring%E4%BD%BF%E7%94%A8junit%E5%81%9A%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2022-09-29
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/2022/09/29/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E5%8E%9F%E5%88%99/">未分类></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2022/09/29/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E5%8E%9F%E5%88%99/">双亲委派原则</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          双亲委派原则&emsp;&emsp;虚拟机在加载类的过程中需要使用类加载器进行加载，在java中，类加载器有很多，jvm使用哪个类加载器加载.class文件，需要使用到双亲委派机制。在java语言系统中支持4种类加载器：
+
+Bootstrap ClassLoader 启动类加载器：主要用于加载java核心库，%JRE_HOME%\lib下的rt.jar、resources.jar、charset.jar等。
+Extention ClassLoader 标准扩展类加载器：主要负责加载%JRE_HOME%\lib\ext目录下的jar和class文件。
+Application ClassLo...
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2022/09/29/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E5%8E%9F%E5%88%99/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2022-09-19
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/2022/09/19/redis%E7%9A%84RDB%E6%8C%81%E4%B9%85%E5%8C%96%E5%A4%B1%E8%B4%A5%E5%8E%9F%E5%9B%A0/">未分类></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2022/09/19/redis%E7%9A%84RDB%E6%8C%81%E4%B9%85%E5%8C%96%E5%A4%B1%E8%B4%A5%E5%8E%9F%E5%9B%A0/">redis的RDB持久化失败</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          1MISCONF Redis is configured to save RDB snapshots, but it is currently not able to persist on disk. Commands that may modify the data set are disabled, because this instance is configured to report errors during writes if RDB snapshotting fails (stop-writes-on-bgsave-error option). Please check ...
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2022/09/19/redis%E7%9A%84RDB%E6%8C%81%E4%B9%85%E5%8C%96%E5%A4%B1%E8%B4%A5%E5%8E%9F%E5%9B%A0/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2022-03-14
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/2022/03/14/jmeter%E4%B8%B2%E8%A1%8C%E6%8E%A5%E5%8F%A3%E8%B0%83%E7%94%A8/">未分类></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2022/03/14/jmeter%E4%B8%B2%E8%A1%8C%E6%8E%A5%E5%8F%A3%E8%B0%83%E7%94%A8/">jmeter串行接口调用</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2022/03/14/jmeter%E4%B8%B2%E8%A1%8C%E6%8E%A5%E5%8F%A3%E8%B0%83%E7%94%A8/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2022-03-14
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/2022/03/14/finall%E5%92%8Creturn%E7%9A%84%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F/">未分类></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2022/03/14/finall%E5%92%8Creturn%E7%9A%84%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F/">finall和return的执行顺序</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          finally和return的执行顺序
+try()⾥⾯有一个return语句， 那么后⾯的finally{}⾥⾯的code会不会被执⾏， 什么时候执⾏， 是在return前还是return后?如果try中有return语句， 那么finally中的代码还是会执⾏。因为return表⽰的是要整个⽅法体返回， 所以，finally中的语句会在return之前执⾏。但是return前执行的finally块内，对数据的修改效果对于引用类型和值类型会不同
+
+123456789101112131415161718192021// 测试 修改值类型static int f() &#123;    in...
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2022/03/14/finall%E5%92%8Creturn%E7%9A%84%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2021-09-12
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/2021/09/12/printf%E5%AF%BC%E8%87%B4%E7%9A%84%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F/">未分类></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2021/09/12/printf%E5%AF%BC%E8%87%B4%E7%9A%84%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F/">printf导致的内存泄漏</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          printf接收的字符串，是格式字符串，也就以为着，我传进来或者输入进来的这个字符串，也可以是格式字符串。比如在buffer里面放了一个“%d”，但系统实际并没有把参数压栈，这个时候，访问是不会越界的。而且格式化字符串有个可以加成”%n$d“，n代表第几个%d参数，由于数据根本没有压入栈，我们可以通过n控制去访问栈上的其他数据。
+  
+ 
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2021/09/12/printf%E5%AF%BC%E8%87%B4%E7%9A%84%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2021-09-12
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/2021/09/12/%E6%8C%87%E9%92%88/">未分类></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2021/09/12/%E6%8C%87%E9%92%88/">指针</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          #通用指针
+12345678910#include &lt;stdio.h&gt;int main()&#123;	int num;	int *pi = &amp;num;	printf(&quot;address of pi: %p\n&quot;, pi);	void *pv = pi;	pi = (int*) pv;	printf(&quot;address of pi: %p\n&quot;, pi);&#125;
+void *pv 通用类型指针，可以转型为任何类型
+函数指针12345678910111213141516#include&lt;stdio.h&gt;int add...
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2021/09/12/%E6%8C%87%E9%92%88/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2021-09-12
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/2021/09/12/Memset/">未分类></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2021/09/12/Memset/">Memset</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          解释：void *memset(void *str,int c,size_t n) 通过参数str将字符c（无符号字符）复制到所指向的字符串的前n个字符中。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 参数：                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;str -指向要填充的字符串指针&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c -这是要设置的值。该值以int形式传递，但是该函数使用此值的无符号ch...
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2021/09/12/Memset/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+   
+</v-card>  
+
+
+  <div id="pagination" class="text-center">
+    <v-pagination 
+      v-model="currentPage" 
+      :length=3 
+      @input="PageChange" 
+      prev-icon="chevron_left"
+      next-icon="chevron_right"
+      color="secondary"
+    ></v-pagination>
+  </div>
+         
+                            <div id="mobile-footer" class="d-block d-md-none">
+                                <v-divider></v-divider>
+                                <div id="mobile-footer-content">
+                                    <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a> &nbsp; Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a></span><br>
+                                    <span> &copy; 2015 - 2023 qwyang</span>
+                                </div>
+                            </div>                   
+                        </v-col>                                            
+                    </v-row>
+                </v-container>
+            </v-content>
+        </v-app>
+    </div>
+    
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.2.30"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-base64@3.5.2/base64.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+
+
+
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <script>if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMode)) window.location.href="https://support.dmeng.net/upgrade-your-browser.html?referrer="+encodeURIComponent(window.location.href); </script>
+    
+    
+        <link rel="shortcut icon" href="/images/favicon.png">
+    
+     
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.2.30/dist/vuetify.min.css" rel="stylesheet">
+    
+<link rel="stylesheet" href="/css/main.css">
+
+    
+    
+
+
+
+
+
+
+
+    
+    
+    
+        <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        
+            load: ['[tex]/mhchem'],
+        
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        
+            packages: {'[+]': ['mhchem']},
+        
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+          
+
+    
+    
+    
+    
+    <title>
+          
+            qwyang
+        
+    </title>
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+    <div id="app">
+        <v-app>
+            <v-content id="page">
+                <v-container fluid>
+                    <v-row>
+                        <v-col cols="2" class="d-none d-md-block">
+                            <div id="sidebar" class="float-right">
+    <a href="/" rel="home">
+        <v-avatar size=96>
+            <img id="logo" src="/images/avatar.png">     
+        </v-avatar> 
+    </a>
+    <v-divider></v-divider>
+    <div class="mini-menu">
+        <v-btn icon href="/">
+            <v-icon>home</v-icon>
+        </v-btn>
+        <v-btn icon href="/categories/">
+            <v-icon>folder</v-icon>
+        </v-btn>
+        <v-btn icon href="/tags/">
+            <v-icon>bookmark</v-icon>
+        </v-btn>
+        <v-btn icon @click="SetNightMode">
+            <v-icon>{{ nightMode }}</v-icon>
+        </v-btn>
+    </div>
+    <v-list id="main-menu" class="font-weight-bold" flat>
+        
+            
+            <v-list-item href="/archives/" link>
+            <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                归档
+            </v-list-item-content>
+            </v-list-item>
+        
+            
+            <v-list-item href="/about/" link>
+            <v-list-item-icon><v-icon>account_circle</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                关于
+            </v-list-item-content>
+            </v-list-item>
+        
+            
+            <v-list-item href="https://qwyang.cn/" link>
+            <v-list-item-icon><v-icon>rss_feed</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                我的博客
+            </v-list-item-content>
+            </v-list-item>
+        
+    </v-list>
+    <v-divider></v-divider>
+    
+        <v-list id="sub-menu" class="font-weight-medium" dense>
+            
+        </v-list>    
+    
+
+    <div id="footer">
+        <div class="footer-social">
+            
+                
+                <v-btn icon href="mailto:qianwangyang@qq.com" target="_blank">
+                    <v-icon>fas fa-envelope</v-icon>
+                </v-btn>
+            
+                
+                <v-btn icon href="https://gitee.com/yangqianwang" target="_blank">
+                    <v-icon>fab fa-github</v-icon>
+                </v-btn>
+            
+        </div>
+        <v-divider></v-divider>
+        <div class="footer-content">
+<!--            -->
+<!--                <span id="busuanzi_container_site_uv" style="display: none;"> -->
+<!--                    总访客量 <span id="busuanzi_value_site_uv"></span>-->
+<!--                </span>-->
+<!--                <br>-->
+<!--            -->
+<!--            <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a></span><br>-->
+            <span>Powered by <a href="https://qwyang.cn/">qwyang</a></span><br>
+            <span>
+                &copy; 2018 - 2023
+                qwyang
+            </span><br>
+            <span>
+                <a href="https://beian.miit.gov.cn/" target="_blank" style="text-decoration: none; color: inherit;"><span>粤ICP备2022075232号</span></a>
+            </span>
+        </div>
+    </div>
+</div>
+
+                        </v-col>
+                        <v-col cols="12" md="10">
+                            <v-row>
+  <v-col cols="12" md="8" align-self="end">
+    <div id="site-header">
+      <div id="site-title">
+        <a href="/" rel="home">qwyang</a>
+      </div>
+      <div id="site-description"></div>
+      <div id="mobile-menu" class="d-block d-md-none">
+        <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-inner-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,false)"></v-text-field>
+        <div class="mobile-mini-menu">
+          <v-btn icon href="/">
+              <v-icon>home</v-icon>
+          </v-btn>
+          <v-btn icon href="/categories/">
+              <v-icon>folder</v-icon>
+          </v-btn>
+          <v-btn icon href="/tags/">
+              <v-icon>bookmark</v-icon>
+          </v-btn>
+          <v-btn icon @click="SetNightMode">
+              <v-icon>{{ nightMode }}</v-icon>
+          </v-btn>
+          
+            
+            <v-btn icon href="/archives/">
+              <v-icon>archive</v-icon>
+            </v-btn>
+          
+            
+            <v-btn icon href="/about/">
+              <v-icon>account_circle</v-icon>
+            </v-btn>
+          
+            
+            <v-btn icon href="https://qwyang.cn/">
+              <v-icon>rss_feed</v-icon>
+            </v-btn>
+          
+        </div>
+      </div>    
+    </div>
+  </v-col>  
+  <v-col cols="4" align-self="end" class="d-none d-md-block">
+    <v-col align-self="end">
+      <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,false)"></v-text-field>
+    </v-col> 
+  </v-col>
+</v-row>
+
+                            <v-card class="elevation-2 index-card">
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2021-09-12
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/2021/09/12/%E5%8E%9F%E5%9C%B0%E7%AE%97%E6%B3%95/">未分类></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2021/09/12/%E5%8E%9F%E5%9C%B0%E7%AE%97%E6%B3%95/">原地算法</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          原地算法基本上不需要额外辅助的数据结构，允许少量额外的辅助变量来转换数据的算法。当算法允许时，输入的数据通常会被要输出的数据覆盖。输入数据被它的输出数据覆盖定义为原地算法既是不充分（快速排序的案例）也非必要。原地算法包含使用O(1)空间复杂度的所有算法。
+实例12345function reverse(a[0..n])     allocate b[0..n]     for i from 0 to n         b[n - i] = a[i]     return b
+需要O(n)的空间来创建b数组，且配置存储器是一件缓慢的算法。使用原地算法  
+123function reve...
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2021/09/12/%E5%8E%9F%E5%9C%B0%E7%AE%97%E6%B3%95/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2021-09-12
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/2021/09/12/Integer-%E6%8B%86%E8%A3%85%E7%AE%B1/">未分类></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2021/09/12/Integer-%E6%8B%86%E8%A3%85%E7%AE%B1/">Integer 拆装箱</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          1234567891011121314151617181920212223242526public static void main(String[] arr)&#123;    Integer a = 1;    Integer b = 2;    Integer c = 3;    Integer d = 3;    //语法糖装箱，相当于 Integer e = Integer.valueOf(321);    Integer e = 321;     Integer f = 321;    Integer df = Integer.valueOf(2);    Long g = ...
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2021/09/12/Integer-%E6%8B%86%E8%A3%85%E7%AE%B1/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2021-09-12
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/2021/09/12/String-%E7%9A%84%E9%95%BF%E5%BA%A6%E9%99%90%E5%88%B6/">未分类></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2021/09/12/String-%E7%9A%84%E9%95%BF%E5%BA%A6%E9%99%90%E5%88%B6/">String 的长度限制</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          String类中有很多重载的构造函数，其中有几个是支持用户传入length来执行长度的：
+1public String(byte bytes[], int offset, int length) 
+可以看出，String的最大长度需在int的范围内。根据Integer类的定义，java.lang.Integer#MAX_VALUE的最大值是2^31 - 1;但这个值只是在运行期间，我们构造String的时候可以支持的一个最大长度，而实际上，在编译期，定义字符串的时候也是有长度限制的。  
+1String s = &quot;11111...1111&quot;;//其中有10万个字符&q...
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2021/09/12/String-%E7%9A%84%E9%95%BF%E5%BA%A6%E9%99%90%E5%88%B6/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2021-09-12
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/2021/09/12/Java%E4%B8%AD%E7%9A%84%E5%AF%B9%E8%B1%A1%E4%B8%80%E5%AE%9A%E5%9C%A8%E5%A0%86%E4%B8%8A%E5%88%86%E9%85%8D%E5%90%97%EF%BC%9F/">未分类></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2021/09/12/Java%E4%B8%AD%E7%9A%84%E5%AF%B9%E8%B1%A1%E4%B8%80%E5%AE%9A%E5%9C%A8%E5%A0%86%E4%B8%8A%E5%88%86%E9%85%8D%E5%90%97%EF%BC%9F/">Java中的对象一定在堆上分配吗？</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          回答&nbsp;&nbsp;&nbsp;&nbsp;不一定，随着JIT编译器的发展，在编译期间，如果JIT经过逃逸分析，发现有些对象没有逃逸出方法，那么有可能堆内存分配会被优化成栈内存分配。但是这也并不是绝对的。就像我们前面看到的一样，在开启逃逸分析之后，也并不是所有User对象都没有在堆上分配。
+逃逸分析&nbsp;&nbsp;&nbsp;&nbsp;逃逸分析(Escape Analysis)是目前Java虚拟机中比较前沿的优化技术。这是一种可以有效减少Java 程序中同步负载和内存堆分配压力的跨函数全局数据流分析算法。通过逃逸分析，Java Hotspot编译器能够分析出一个新的对象...
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2021/09/12/Java%E4%B8%AD%E7%9A%84%E5%AF%B9%E8%B1%A1%E4%B8%80%E5%AE%9A%E5%9C%A8%E5%A0%86%E4%B8%8A%E5%88%86%E9%85%8D%E5%90%97%EF%BC%9F/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2021-09-12
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/2021/09/12/%E6%97%A0%E8%A7%84%E7%9F%A9%E4%B8%8D%E6%88%90%E6%96%B9%E5%9C%86%EF%BC%8CEslint%E5%92%8CPrettier-%E8%A7%84%E8%8C%83%E4%BB%A3%E7%A0%81/">未分类></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2021/09/12/%E6%97%A0%E8%A7%84%E7%9F%A9%E4%B8%8D%E6%88%90%E6%96%B9%E5%9C%86%EF%BC%8CEslint%E5%92%8CPrettier-%E8%A7%84%E8%8C%83%E4%BB%A3%E7%A0%81/">无规矩不成方圆，Eslint和Prettier 规范代码</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          
+代码规范是软件开发领域经久不衰的换题，几乎所有工程师在开发过程中都会遇到，并或多或少会思考过这一问题。随着前端应用的大型化和复杂化，越来越多的前端团队开始重视 JavaScript 代码规范。  
+
+ESLintESLint 官方简介：
+
+代码检查是一种静态的分析，常用于寻找有问题的模式或者代码，并且不依赖于具体的编码风格。对大多数编程语言来说都会有代码检查，一般来说编译程序会内置检查工具。
+
+
+JavaScript 是一个动态的弱类型语言，在开发中比较容易出错。因为没有编译程序，为了寻找 JavaScript 代码错误通常需要在执行过程中不断调试。像 ESLint 这样的可以让程序员...
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2021/09/12/%E6%97%A0%E8%A7%84%E7%9F%A9%E4%B8%8D%E6%88%90%E6%96%B9%E5%9C%86%EF%BC%8CEslint%E5%92%8CPrettier-%E8%A7%84%E8%8C%83%E4%BB%A3%E7%A0%81/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2021-09-09
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/2021/09/09/react-%E8%B7%A8%E5%9F%9F/">未分类></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2021/09/09/react-%E8%B7%A8%E5%9F%9F/">react 跨域</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          react 跨域问题跨域出于安全性，浏览器限制脚本内发起的跨源HTTP请求，XMLHttpRequest和Fetch API遵循同源策略。 这意味着使用这些API的Web应用程序只能从加载应用程序的同一个域请求HTTP资源。跨源HTTP请求的一个例子：运行在 http://domain-a.com 的JavaScript代码使用XMLHttpRequest来发起一个到 https://domain-b.com/data.json 的请求。禁止自己以外的其它origin（域，协议和端口），访问加载资源。
+
+同源定义如果两个 URL 的 protocol、port  (如果有指定的话)和 h...
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2021/09/09/react-%E8%B7%A8%E5%9F%9F/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2021-03-19
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/2021/03/19/%E5%BA%8F%E5%88%97%E5%8C%96/">未分类></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2021/03/19/%E5%BA%8F%E5%88%97%E5%8C%96/">序列化</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          序列化序列化是将对象转为可存储或者传输的形式，一般以字节码或者xml形式传输。在接收到后以相反的过程还原为完全相等的对象，这个相反的对象叫做返序列化。  
+Serializable 接口类通过实现 java.io.Serializable 接口启用序列号功能。
+123456789101112131415161718192021222324252627282930313233343536package com.hollischaung.serialization.SerializableDemos;import java.io.Serializable;/** * Created by h...
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2021/03/19/%E5%BA%8F%E5%88%97%E5%8C%96/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2021-03-19
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/2021/03/19/%E4%BA%8B%E5%8A%A1/">未分类></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2021/03/19/%E4%BA%8B%E5%8A%A1/">事务</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          事务什么是事务？事务是用户定义的一个数据库操作序列，这些操作要么全做，要么全不做，是一个不可分割的工作单位。  
+123BEGIN TRANSACTION; //开始事务COMMIT; //提交事务，事务中所有对数据库的更新写回到磁盘上的物理数据库中ROLLBACK; //回滚，撤销事务对数据库做的所有操作，回滚到事务开始的状态。
+
+事务的ACID特性原子性：要么不做，要么都做一致性：从一致性状态转到另一个一致性状态。因此到数据库只包含成功事务提交的结果时，就说数据库处于一致性状态。隔离性：一个事务执行不受另一个事务干扰。持续性：一个事务提交，对数据库的改变就是永久性的。
+
+
+
+故障种类...
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2021/03/19/%E4%BA%8B%E5%8A%A1/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2021-03-13
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/2021/03/13/%E8%BF%90%E8%BE%93%E5%B1%82/">未分类></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2021/03/13/%E8%BF%90%E8%BE%93%E5%B1%82/">运输层</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          运输层的角度看，真正通信的端点并不上主机而是主机中的应用进程。端到端的通信是应用进程之间的通信。重要功能：复用和分用复用：发送方不同的应用进程都可以使用同一运输层协议传输数据。分用：接收方的运输层在剥去报首部后能够把这些数据真正交付目的应用进程。
+
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2021/03/13/%E8%BF%90%E8%BE%93%E5%B1%82/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2021-03-13
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/2021/03/13/UDP%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">未分类></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2021/03/13/UDP%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">UDP网络编程</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          UDP协议&emsp;UDP协议提供基于独立数据包的不可靠的网络通信模式。数据包是通过网发送的包含源和目的地址信息的消息，UDP协议不能保证数据包是否能到达、何时到达、内容有没有缺失。UDP建立的连接提供无连接的、尽最大努力的数据传输服务。UDP之间的通信需要用到端口号，但由于UDP的通信是无连接的，所以不需要使用套接字来建立连接。特定：①UDP是无连接的，发送数据前不需要建立连接。因此减少了开销和发送数据前的时延。所以与TCP相比，UDP更快一些。②UDP尽最大努力交付，不保证数据的可靠传输，因此主机不需要维持复杂的连接状态。③UDP面向报文，对应用层传下来的报文，不拆分、合并。保留报...
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2021/03/13/UDP%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+   
+</v-card>  
+
+
+  <div id="pagination" class="text-center">
+    <v-pagination 
+      v-model="currentPage" 
+      :length=3 
+      @input="PageChange" 
+      prev-icon="chevron_left"
+      next-icon="chevron_right"
+      color="secondary"
+    ></v-pagination>
+  </div>
+         
+                            <div id="mobile-footer" class="d-block d-md-none">
+                                <v-divider></v-divider>
+                                <div id="mobile-footer-content">
+                                    <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a> &nbsp; Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a></span><br>
+                                    <span> &copy; 2015 - 2023 qwyang</span>
+                                </div>
+                            </div>                   
+                        </v-col>                                            
+                    </v-row>
+                </v-container>
+            </v-content>
+        </v-app>
+    </div>
+    
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.2.30"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-base64@3.5.2/base64.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+
+
+
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

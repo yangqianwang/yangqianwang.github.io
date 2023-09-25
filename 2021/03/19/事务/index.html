@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <script>if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMode)) window.location.href="https://support.dmeng.net/upgrade-your-browser.html?referrer="+encodeURIComponent(window.location.href); </script>
+    
+    
+        <link rel="shortcut icon" href="/images/favicon.png">
+    
+     
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.2.30/dist/vuetify.min.css" rel="stylesheet">
+    
+<link rel="stylesheet" href="/css/main.css">
+
+    
+    
+
+
+
+
+
+
+
+    
+    
+          
+
+    
+    
+    
+    
+    <title>
+        
+            事务 | qwyang
+        
+    </title>
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+    <div id="app">
+        <v-app>
+            <v-content id="page">
+                <v-container fluid>
+                    <v-row>
+                        <v-col cols="2" class="d-none d-md-block">
+                            <div id="sidebar" class="float-right">
+    <a href="/" rel="home">
+        <v-avatar size=96>
+            <img id="logo" src="/images/avatar.png">     
+        </v-avatar> 
+    </a>
+    <v-divider></v-divider>
+    <div class="mini-menu">
+        <v-btn icon href="/">
+            <v-icon>home</v-icon>
+        </v-btn>
+        <v-btn icon href="/categories/">
+            <v-icon>folder</v-icon>
+        </v-btn>
+        <v-btn icon href="/tags/">
+            <v-icon>bookmark</v-icon>
+        </v-btn>
+        <v-btn icon @click="SetNightMode">
+            <v-icon>{{ nightMode }}</v-icon>
+        </v-btn>
+    </div>
+    <v-list id="main-menu" class="font-weight-bold" flat>
+        
+            
+            <v-list-item href="/archives/" link>
+            <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                归档
+            </v-list-item-content>
+            </v-list-item>
+        
+            
+            <v-list-item href="/about/" link>
+            <v-list-item-icon><v-icon>account_circle</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                关于
+            </v-list-item-content>
+            </v-list-item>
+        
+            
+            <v-list-item href="https://qwyang.cn/" link>
+            <v-list-item-icon><v-icon>rss_feed</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                我的博客
+            </v-list-item-content>
+            </v-list-item>
+        
+    </v-list>
+    <v-divider></v-divider>
+    
+        <div class="post-toc">
+            <a href="/2021/03/19/%E4%BA%8B%E5%8A%A1/" class="toc-header">文章目录</a>
+            <div class="toc-content">
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1"><span class="toc-number">1.</span> <span class="toc-text">事务</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E7%9A%84ACID%E7%89%B9%E6%80%A7"><span class="toc-number">1.1.</span> <span class="toc-text">事务的ACID特性</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%85%E9%9A%9C%E7%A7%8D%E7%B1%BB"><span class="toc-number">2.</span> <span class="toc-text">故障种类</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E5%86%85%E9%83%A8%E6%95%85%E9%9A%9C%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">事务内部故障：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E6%95%85%E9%9A%9C"><span class="toc-number">2.2.</span> <span class="toc-text">系统故障</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8B%E8%B4%A8%E6%95%85%E9%9A%9C"><span class="toc-number">2.3.</span> <span class="toc-text">介质故障</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">2.4.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%81%A2%E5%A4%8D"><span class="toc-number">3.</span> <span class="toc-text">数据恢复</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E8%BD%AC%E5%82%A8"><span class="toc-number">3.1.</span> <span class="toc-text">数据转储</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">3.2.</span> <span class="toc-text">日志文件的作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E6%95%85%E9%9A%9C%E6%81%A2%E5%A4%8D"><span class="toc-number">3.3.</span> <span class="toc-text">事务故障恢复</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E6%95%85%E9%9A%9C%E7%9A%84%E6%81%A2%E5%A4%8D"><span class="toc-number">3.4.</span> <span class="toc-text">系统故障的恢复</span></a></li></ol></li></ol>
+            </div>
+        </div>
+    
+
+    <div id="footer">
+        <div class="footer-social">
+            
+                
+                <v-btn icon href="mailto:qianwangyang@qq.com" target="_blank">
+                    <v-icon>fas fa-envelope</v-icon>
+                </v-btn>
+            
+                
+                <v-btn icon href="https://gitee.com/yangqianwang" target="_blank">
+                    <v-icon>fab fa-github</v-icon>
+                </v-btn>
+            
+        </div>
+        <v-divider></v-divider>
+        <div class="footer-content">
+<!--            -->
+<!--                <span id="busuanzi_container_site_uv" style="display: none;"> -->
+<!--                    总访客量 <span id="busuanzi_value_site_uv"></span>-->
+<!--                </span>-->
+<!--                <br>-->
+<!--            -->
+<!--            <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a></span><br>-->
+            <span>Powered by <a href="https://qwyang.cn/">qwyang</a></span><br>
+            <span>
+                &copy; 2018 - 2023
+                qwyang
+            </span><br>
+            <span>
+                <a href="https://beian.miit.gov.cn/" target="_blank" style="text-decoration: none; color: inherit;"><span>粤ICP备2022075232号</span></a>
+            </span>
+        </div>
+    </div>
+</div>
+
+                        </v-col>
+                        <v-col cols="12" md="10">
+                            <v-row>
+  <v-col cols="12" md="8" align-self="end">
+    <div id="site-header">
+      <div id="site-title">
+        <a href="/" rel="home">qwyang</a>
+      </div>
+      <div id="site-description"></div>
+      <div id="mobile-menu" class="d-block d-md-none">
+        <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-inner-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,false)"></v-text-field>
+        <div class="mobile-mini-menu">
+          <v-btn icon href="/">
+              <v-icon>home</v-icon>
+          </v-btn>
+          <v-btn icon href="/categories/">
+              <v-icon>folder</v-icon>
+          </v-btn>
+          <v-btn icon href="/tags/">
+              <v-icon>bookmark</v-icon>
+          </v-btn>
+          <v-btn icon @click="SetNightMode">
+              <v-icon>{{ nightMode }}</v-icon>
+          </v-btn>
+          
+            
+            <v-btn icon href="/archives/">
+              <v-icon>archive</v-icon>
+            </v-btn>
+          
+            
+            <v-btn icon href="/about/">
+              <v-icon>account_circle</v-icon>
+            </v-btn>
+          
+            
+            <v-btn icon href="https://qwyang.cn/">
+              <v-icon>rss_feed</v-icon>
+            </v-btn>
+          
+        </div>
+      </div>    
+    </div>
+  </v-col>  
+  <v-col cols="4" align-self="end" class="d-none d-md-block">
+    <v-col align-self="end">
+      <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,false)"></v-text-field>
+    </v-col> 
+  </v-col>
+</v-row>
+
+                            <v-card class="elevation-2 post-card">
+    
+    
+        <div class="post-header">
+  <a class="post-header-title font-weight-medium" href="/2021/03/19/%E4%BA%8B%E5%8A%A1/">事务</a>
+  <div class="post-header-meta">   
+    <span>
+      <v-icon color="">event</v-icon>
+      发布于:&nbsp;2021-03-19
+    </span>
+    <span>
+      <v-icon color="">event_available</v-icon>
+      更新于:&nbsp;2023-07-22
+    </span>
+    <span>
+      <v-icon color="">folder</v-icon>
+      分类于:&nbsp;未分类
+    </span>
+    
+    <span>
+      <v-icon color="">visibility</v-icon>
+      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+    </span>
+    
+  </div>
+</div>
+
+    
+    
+    
+    
+    <div class="post-content typo">
+        <h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><p>什么是事务？<br>事务是用户定义的一个数据库操作序列，这些操作要么全做，要么全不做，是一个不可分割的工作单位。  </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">BEGIN</span> TRANSACTION; <span class="operator">/</span><span class="operator">/</span>开始事务</span><br><span class="line"><span class="keyword">COMMIT</span>; <span class="operator">/</span><span class="operator">/</span>提交事务，事务中所有对数据库的更新写回到磁盘上的物理数据库中</span><br><span class="line"><span class="keyword">ROLLBACK</span>; <span class="operator">/</span><span class="operator">/</span>回滚，撤销事务对数据库做的所有操作，回滚到事务开始的状态。</span><br></pre></td></tr></table></figure>
+
+<h2 id="事务的ACID特性"><a href="#事务的ACID特性" class="headerlink" title="事务的ACID特性"></a>事务的ACID特性</h2><p>原子性：要么不做，要么都做<br>一致性：从一致性状态转到另一个一致性状态。因此到数据库只包含成功事务提交的结果时，就说数据库处于一致性状态。<br>隔离性：一个事务执行不受另一个事务干扰。<br>持续性：一个事务提交，对数据库的改变就是永久性的。</p>
+<img src="/images/img/%E4%BA%8B%E5%8A%A1%E7%9A%84%E7%89%B9%E6%80%A7.png" class="" width="500" height="500" title="rotate(270deg)">
+
+
+<h1 id="故障种类"><a href="#故障种类" class="headerlink" title="故障种类"></a>故障种类</h1><h2 id="事务内部故障："><a href="#事务内部故障：" class="headerlink" title="事务内部故障："></a>事务内部故障：</h2><p>事务内部故障有的是可以通过事务程序本身可以发现的，有的是非预期的，不能由事务程序处理。<br>事务故障更多的是指非预期性的，是不能由事务程序处理的，溢出、并发、死锁等。</p>
+<h2 id="系统故障"><a href="#系统故障" class="headerlink" title="系统故障"></a>系统故障</h2><p>系统停止运转的任何事件，使得系统要重新启动。<br>处理：恢复系统后，恢复子系统除需要撤销所有未完成的事务外，还需要重做（undo）所有提交过的事务，以将数据库恢复到真正一致状态。</p>
+<h2 id="介质故障"><a href="#介质故障" class="headerlink" title="介质故障"></a>介质故障</h2><p>系统故障称为软故障，介质故障称硬故障，硬故障指外存故障。这类故障破坏数据库并影响正在存取的这一部分事务。但这类故障发送的可能性较小。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总结的说，故障对数据库的影响有两种可能性，<br>①数据库本身被破坏；<br>②数据库没有被破坏，但数据可能不正确。</p>
+<h1 id="数据恢复"><a href="#数据恢复" class="headerlink" title="数据恢复"></a>数据恢复</h1><p>恢复技术概括为：冗余。最常见的技术是数据转储和登记日志文件。</p>
+<h2 id="数据转储"><a href="#数据转储" class="headerlink" title="数据转储"></a>数据转储</h2><p>数据库管理员，定期将数据库复制到其他存储介质中，做后备副本。</p>
+<p>静态存储：系统无运行事务时进行转储操作。（简单）转储期间不允许进行数据库修改。降低数据库的可用性。</p>
+<p>动态转储：转储期间运行对数据库进行存取或修改。（复杂）在转储期间允许对数据库进行存取和修改。</p>
+<h2 id="日志文件的作用"><a href="#日志文件的作用" class="headerlink" title="日志文件的作用"></a>日志文件的作用</h2><p>①事务故障和系统故障恢复必须使用日志文件<br>②动态转储方式中必须要用到日志文件，后备副本和日志文件结合起来才能有效恢复数据库。<br>③静态转储方式中也可以简历日志文件，当数据库破坏后可以重新装入后备副本，然后利用日志文件把已经完成的事务重做一遍，在故障未完成的数据进行撤销处理。    </p>
+<p>登记日志文件两大原则：<br>①登记次序严格按并发事务执行的时间次序。<br>②必须先写日志，后写数据库。  </p>
+<h2 id="事务故障恢复"><a href="#事务故障恢复" class="headerlink" title="事务故障恢复"></a>事务故障恢复</h2><p>事务故障的原因可能是内部造成的错误，或者数据类型错误，这些是由于编程人员的疏忽导致的。修复故障，需要事务回到事务开始标记。<br>步骤：<br>①方向扫描事务，查找该事务的更新操作。<br>②对事务的更新操作执行逆操作。<br>③继续反向扫描事务，查找该事务的其他更新操作，并同样处理。<br>⑤直至读到事务的开始标记。  </p>
+<h2 id="系统故障的恢复"><a href="#系统故障的恢复" class="headerlink" title="系统故障的恢复"></a>系统故障的恢复</h2><p>系统故障导致数据库不一致现象，系统故障是外来因素导致的数据库不一致。在恢复时，需要把提交的事务标识入重做队列，同时找出故障发送时尚未完成的事务记录并将事务标记入撤销队列。<br>对撤销队列中的各个事务进行撤销（UNDO）处理。<br>对重做队列中的各个事务进行重做处理。</p>
+
+    </div>
+    <!--文末结束语-->
+    
+        <div style="text-align:center;color: #ccc;font-size:24px;"> --- 本文结束 <i class="fas fa-heart"></i> The End --- </div>
+    
+    <!--页脚广告-->
+    
+    <v-divider></v-divider>
+    
+    <div class="post-nav">             
+        
+            <div class="post-nav-button float-left">
+                <v-icon>chevron_left</v-icon>
+                <a class="font-weight-bold text-left" href="/2021/03/19/%E5%BA%8F%E5%88%97%E5%8C%96/">
+                    序列化
+                </a>
+            </div>
+              
+          
+            <div class="post-nav-button float-right">
+                <a class="font-weight-bold text-right" href="/2021/03/13/%E8%BF%90%E8%BE%93%E5%B1%82/">      
+                    运输层
+                </a>
+                <v-icon>chevron_right</v-icon>
+            </div>
+        
+    </div>
+</v-card>
+
+
+
+        
+                            <div id="mobile-footer" class="d-block d-md-none">
+                                <v-divider></v-divider>
+                                <div id="mobile-footer-content">
+                                    <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a> &nbsp; Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a></span><br>
+                                    <span> &copy; 2015 - 2023 qwyang</span>
+                                </div>
+                            </div>                   
+                        </v-col>                                            
+                    </v-row>
+                </v-container>
+            </v-content>
+        </v-app>
+    </div>
+    
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.2.30"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-base64@3.5.2/base64.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+
+
+
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@8.4.8/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({
+        startOnLoad: true,
+        theme: "default"
+    });</script>
+
+
+
+
+
+</body>
+</html>
